@@ -100,15 +100,15 @@ for (n, i) in zip([20, 40, 80, 160, 320], 1:5)
     results[i,2] = info.iters
 
     # Solve Schur complement problem with preconditioned CG
-    chol_Mp = MatrixFactorizations.lu(Mp)
-    t4 = @elapsed p, info = IterativeSolvers.cg(Sm, y, Pl=chol_Mp, log=true)
+    lu_Mp = MatrixFactorizations.lu(Mp)
+    t4 = @elapsed p, info = IterativeSolvers.cg(Sm, y, Pl=lu_Mp, log=true)
     results[i,3] = info.iters
 
 
     # Recover velocity
     t5 = @elapsed u = chol_A \ (fv - B*p)
     err = norm([u;p] - x) / norm(x)
-    results[i,4] = info.iters
+    results[i,4] = err
 
     # Record timings
     timings[i,1] = t1+t2
